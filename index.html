@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CuraSync | Unified Patient-Centric Healthcare Ecosystem</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ================= BASE STYLES ================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.5; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    .hidden { display: none !important; }
+
+    /* ================= TOP BAR ================= */
+    .top-bar { background: #0f172a; color: #94a3b8; font-size: 0.8rem; padding: 0.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .top-bar-left, .top-bar-right { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+    .top-bar-left i { color: #ef4444; }
+    .top-bar-right a { color: #f59e0b; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
+    .lang-toggle { background: none; border: 1px solid #334155; color: white; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.75rem; }
+    .lang-toggle:hover { background: #1e293b; }
+
+    /* ================= HEADER ================= */
+    .main-header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+    .logo-container { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
+    .logo-icon { background: #0284c7; color: white; width: 2.8rem; height: 2.8rem; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .logo-text h1 { font-size: 1.4rem; font-weight: 700; color: #0f172a; line-height: 1.1; }
+    .logo-text p { font-size: 0.75rem; color: #64748b; font-weight: 500; }
+    
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.95rem; font-weight: 500; color: #475569; cursor: pointer; transition: color 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+    .nav-links a:hover, .nav-links a.active { color: #0284c7; }
+
+    .btn-primary { background: #0284c7; color: white; padding: 0.6rem 1.5rem; border-radius: 2rem; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+    .btn-primary:hover { background: #0369a1; }
+
+    /* ================= HERO SECTION ================= */
+    .hero-section { background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: #e0f2fe; color: #0369a1; padding: 0.4rem 1rem; border-radius: 2rem; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
+    .hero-section h2 { font-size: 3.5rem; font-weight: 800; color: #0f172a; line-height: 1.2; max-width: 800px; margin: 0 auto 1.5rem; letter-spacing: -0.03em; }
+    .hero-section h2 span { color: #0284c7; }
+    .hero-section > p { font-size: 1.1rem; color: #475569; max-width: 700px; margin: 0 auto 2.5rem; }
+    
+    .hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .btn-secondary { background: #be123c; color: white; padding: 0.8rem 1.8rem; border-radius: 2rem; font-weight: 600; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+    .btn-secondary:hover { background: #9f1239; }
+    .btn-outline { background: white; color: #0f172a; padding: 0.8rem 1.8rem; border-radius: 2rem; font-weight: 600; font-size: 1rem; border: 1px solid #cbd5e1; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+    .btn-outline:hover { border-color: #0284c7; color: #0284c7; }
+
+    .search-bar-container { max-width: 800px; margin: 0 auto 2rem; display: flex; background: white; padding: 0.5rem; border-radius: 3rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; gap: 0.5rem; }
+    .search-bar-container input { flex: 1; border: none; padding: 0.8rem 1.5rem; font-size: 1rem; font-family: inherit; outline: none; background: transparent; }
+
+    .hero-stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-top: 3rem; }
+    .stat-item h3 { font-size: 2.5rem; font-weight: 800; color: #0f172a; line-height: 1; }
+    .stat-item p { font-size: 0.9rem; color: #64748b; font-weight: 500; margin-top: 0.5rem; }
+
+    /* ================= SPECIALITIES SECTION ================= */
+    .section-container { max-width: 1300px; margin: 0 auto; padding: 4rem 2rem; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; color: #0f172a; }
+    .section-header p { color: #64748b; margin-top: 0.5rem; font-size: 1rem; }
+    .section-header a { color: #0284c7; font-weight: 600; font-size: 0.95rem; cursor: pointer; }
+
+    .spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+    .spec-card { background: white; border: 1px solid #e2e8f0; border-radius: 1.2rem; padding: 1.8rem; transition: all 0.2s; display: flex; flex-direction: column; position: relative; }
+    .spec-card:hover { border-color: #38bdf8; box-shadow: 0 10px 30px -10px rgba(2, 132, 199, 0.15); transform: translateY(-3px); }
+    .spec-icon { font-size: 1.8rem; margin-bottom: 1.2rem; }
+    .spec-icon.heart { color: #ef4444; } .spec-icon.blood { color: #dc2626; } .spec-icon.bone { color: #78716c; } .spec-icon.microscope { color: #475569; } .spec-icon.lungs { color: #f87171; } .spec-icon.pill { color: #eab308; }
+    .spec-doc-count { position: absolute; top: 1.8rem; right: 1.8rem; background: #f1f5f9; color: #475569; padding: 0.3rem 0.8rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; }
+    .spec-card h3 { font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+    .spec-card p { font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem; flex: 1; }
+    .spec-link { color: #0284c7; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 0.3rem; margin-top: auto; }
+
+    /* ================= FOUR PILLARS ================= */
+    .pillars-section { background: #0f172a; color: white; padding: 4rem 2rem; }
+    .pillars-container { max-width: 1300px; margin: 0 auto; }
+    .pillars-header h4 { color: #38bdf8; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .pillars-header h2 { font-size: 2.2rem; font-weight: 700; }
+    .pillars-header p { color: #94a3b8; margin-top: 0.8rem; font-size: 1rem; max-width: 700px; }
+    .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; }
+    .pillar-card { background: #1e293b; border: 1px solid #334155; border-radius: 1.2rem; padding: 1.8rem; }
+    .pillar-icon { background: #0f172a; color: #38bdf8; width: 3rem; height: 3rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.2rem; }
+    .pillar-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem; }
+    .pillar-card p { font-size: 0.9rem; color: #94a3b8; }
+
+    /* ================= ARCHITECTURE SECTION ================= */
+    .arch-section { max-width: 1300px; margin: 0 auto; padding: 4rem 2rem; }
+    .arch-hero { background: #0f172a; border-radius: 1.5rem; padding: 3rem; color: white; margin-bottom: 3rem; }
+    .arch-hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+    .arch-hero p { color: #94a3b8; font-size: 1.1rem; max-width: 900px; margin-bottom: 2.5rem; }
+    .arch-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .arch-stat { background: rgba(255,255,255,0.05); padding: 1.5rem 2rem; border-radius: 1rem; flex: 1; min-width: 200px; border: 1px solid #334155; }
+    .arch-stat h3 { font-size: 2rem; color: #10b981; font-weight: 800; }
+    .arch-stat p { color: #cbd5e1; font-size: 0.9rem; margin-top: 0.5rem; }
+
+    .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    .arch-card { background: white; border: 1px solid #e2e8f0; border-radius: 1.2rem; padding: 1.8rem; }
+    .arch-card .badge { background: #f1f5f9; padding: 0.3rem 0.6rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; color: #475569; display: inline-block; margin-bottom: 1rem; }
+    .arch-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .arch-card p { font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; }
+
+    /* ================= LOGIN PORTAL ================= */
+    .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 150px); background: #f8fafc; padding: 2rem; }
+    .login-container { width: 100%; max-width: 480px; }
+    .login-header { text-align: center; margin-bottom: 2rem; }
+    .login-header .logo-icon { margin: 0 auto 1rem; width: 4rem; height: 4rem; font-size: 2rem; }
+    .login-header h2 { font-size: 2rem; font-weight: 800; color: #0f172a; }
+    .login-header p { color: #64748b; font-size: 0.95rem; margin-top: 0.5rem; }
+    
+    .role-tabs { display: flex; background: #e2e8f0; padding: 0.4rem; border-radius: 1rem; margin-bottom: 1.5rem; }
+    .role-tab { flex: 1; text-align: center; padding: 0.6rem; border-radius: 0.8rem; font-weight: 600; font-size: 0.9rem; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s; }
+    .role-tab.active { background: white; color: #0f172a; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+    .login-card { background: white; border: 1px solid #e2e8f0; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+    .login-card .access-mode { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.75rem; font-weight: 700; color: #64748b; }
+    .login-card .access-mode span { background: #e0f2fe; color: #0369a1; padding: 0.2rem 0.6rem; border-radius: 1rem; }
+    
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem; }
+    .form-group input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.8rem; font-family: inherit; font-size: 0.95rem; transition: all 0.2s; }
+    .form-group input:focus { outline: none; border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.1); }
+    
+    .btn-submit { width: 100%; padding: 0.9rem; border: none; border-radius: 0.8rem; font-weight: 600; font-size: 1rem; cursor: pointer; color: white; display: flex; justify-content: center; align-items: center; gap: 0.5rem; transition: all 0.2s; margin-top: 1rem; }
+    .btn-submit.patient { background: #0d9488; } .btn-submit.patient:hover { background: #0f766e; }
+    .btn-submit.doctor { background: #2563eb; } .btn-submit.doctor:hover { background: #1d4ed8; }
+    .btn-submit.admin { background: #7c3aed; } .btn-submit.admin:hover { background: #6d28d9; }
+
+    .quick-demo { margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; text-align: center; }
+    .quick-demo p { font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 1rem; }
+    .demo-buttons { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+    .demo-btn { background: white; border: 1px solid #e2e8f0; padding: 0.4rem 0.8rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; transition: all 0.2s; }
+    .demo-btn:hover { border-color: #cbd5e1; background: #f8fafc; }
+    .demo-btn.patient { color: #0d9488; border-color: #0d9488; } .demo-btn.patient:hover { background: #f0fdfa; }
+    .demo-btn.doctor { color: #2563eb; border-color: #2563eb; } .demo-btn.doctor:hover { background: #eff6ff; }
+    .demo-btn.admin { color: #7c3aed; border-color: #7c3aed; } .demo-btn.admin:hover { background: #f5f3ff; }
+
+    /* ================= DASHBOARD (Matches Previous) ================= */
+    #dashboard-page { background: #f8fafc; min-height: 100vh; }
+    .app-header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+    .dashboard-content { max-width: 1300px; margin: 0 auto; padding: 2.5rem 2rem; }
+    .dash-welcome { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+    .stat-card { background: white; border-radius: 1.2rem; padding: 1.5rem; border: 1px solid #e2e8f0; }
+    .stat-icon { font-size: 1.5rem; color: #0284c7; background: #e0f2fe; width: 2.8rem; height: 2.8rem; display: flex; align-items: center; justify-content: center; border-radius: 0.8rem; margin-bottom: 1rem; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .panel { background: white; border-radius: 1.2rem; padding: 1.8rem; border: 1px solid #e2e8f0; }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .list-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f1f5f9; }
+    .list-icon { width: 2.5rem; height: 2.5rem; background: #f0f9ff; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; color: #0284c7; }
+    .badge-green { background: #dcfce7; color: #166534; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 600; }
+
+    /* ================= FOOTER ================= */
+    .main-footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 3rem 2rem 2rem; }
+    .footer-grid { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+    .footer-col h4 { font-size: 0.9rem; font-weight: 600; color: #0f172a; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col ul li { font-size: 0.9rem; color: #64748b; display: flex; align-items: flex-start; gap: 0.5rem; }
+    .footer-bottom { max-width: 1300px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.85rem; color: #94a3b8; }
+
+    /* ================= REAL AI CHATBOT ================= */
+    .chatbot-toggle { position: fixed; bottom: 2rem; right: 2rem; background: #0d9488; color: white; width: 3.5rem; height: 3.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 10px 25px rgba(13, 148, 136, 0.4); cursor: pointer; border: none; z-index: 1000; transition: transform 0.2s; }
+    .chatbot-toggle:hover { transform: scale(1.05); }
+    
+    .chatbot-window { position: fixed; bottom: 6.5rem; right: 2rem; width: 350px; background: white; border-radius: 1.2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
+    .chatbot-window.active { display: flex; }
+    .chat-header { background: #0f172a; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .chat-header h3 { font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .chat-close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; }
+    .chat-messages { padding: 1rem; height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; background: #f8fafc; }
+    .message { max-width: 85%; padding: 0.8rem 1rem; border-radius: 1rem; font-size: 0.85rem; line-height: 1.4; }
+    .message.bot { background: white; border: 1px solid #e2e8f0; color: #1e293b; align-self: flex-start; border-bottom-left-radius: 0.2rem; }
+    .message.user { background: #0284c7; color: white; align-self: flex-end; border-bottom-right-radius: 0.2rem; }
+    .chat-input-area { padding: 1rem; background: white; border-top: 1px solid #e2e8f0; display: flex; gap: 0.5rem; }
+    .chat-input-area input { flex: 1; padding: 0.6rem 1rem; border: 1px solid #cbd5e1; border-radius: 2rem; font-family: inherit; outline: none; }
+    .chat-input-area button { background: #0284c7; color: white; border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    
+    .typing { font-size: 0.8rem; color: #94a3b8; font-style: italic; display: none; margin-bottom: 0.5rem; }
+
+    @media (max-width: 800px) {
+      .hero-section h2 { font-size: 2.5rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .search-bar-container { flex-direction: column; border-radius: 1rem; }
+      .role-tabs { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= TOP BAR ================= -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span><i class="fas fa-circle"></i> <span data-en="24/7 Emergency: 1068 / 1800-309-0309" data-hi="24/7 आपातकालीन: 1068 / 1800-309-0309">24/7 Emergency: 1068 / 1800-309-0309</span></span>
+      <span data-en="OPD Appointments: +91-880-000-1068" data-hi="ओपीडी अपॉइंटमेंट: +91-880-000-1068">OPD Appointments: +91-880-000-1068</span>
+    </div>
+    <div class="top-bar-right">
+      <button class="lang-toggle" id="lang-toggle">हिंदी / EN</button>
+      <a href="#"><i class="fas fa-language"></i> <span data-en="AI Plain Translator" data-hi="एआई सरल अनुवादक">AI Plain Translator</span></a>
+    </div>
+  </div>
+
+  <!-- ================= HEADER ================= -->
+  <header class="main-header">
+    <div class="logo-container" onclick="showPage('landing')">
+      <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+      <div class="logo-text">
+        <h1>CuraSync</h1>
+        <p data-en="Patient · Doctor · Diagnostic LIS · Pharmacy" data-hi="मरीज़ · डॉक्टर · डायग्नोस्टिक लैब · फार्मेसी">Patient · Doctor · Diagnostic LIS · Pharmacy</p>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a onclick="showPage('landing')" id="nav-home"><i class="fas fa-hospital"></i> <span data-en="Hospital Home" data-hi="अस्पताल होम">Hospital Home</span></a>
+      <a onclick="showPage('architecture')" id="nav-arch"><i class="fas fa-layer-group"></i> <span data-en="Architecture & Standards" data-hi="वास्तुकला और मानक">Architecture & Standards</span></a>
+    </div>
+    <button class="btn-primary" onclick="showPage('login')">
+      <i class="fas fa-arrow-right-to-bracket"></i> <span data-en="Login / Sign In" data-hi="लॉगिन / साइन इन">Login / Sign In</span>
+    </button>
+  </header>
+
+  <!-- ================= PAGE 1: LANDING PAGE ================= -->
+  <div id="page-landing">
+    <section class="hero-section">
+      <div class="hero-badge">
+        <i class="fas fa-shield-check"></i> <span data-en="Unified Healthcare Ecosystem • Sovereign Patient Consent" data-hi="एकीकृत स्वास्थ्य सेवा पारिस्थितिकी तंत्र • संप्रभु रोगी सहमति">Unified Healthcare Ecosystem • Sovereign Patient Consent</span>
+      </div>
+      <h2><span data-en="World-Class Healthcare," data-hi="विश्व स्तरीय स्वास्थ्य सेवा,">World-Class Healthcare,</span><br><span data-en="Connected Around You." data-hi="आपके चारों ओर जुड़ा हुआ।">Connected Around You.</span></h2>
+      <p data-en="CuraSync unifies top hospital doctors, accredited diagnostic labs (LIS), verified pharmacies, and your entire medical history into one secure, patient-controlled digital health record." data-hi="CuraSync शीर्ष अस्पताल के डॉक्टरों, मान्यता प्राप्त डायग्नोस्टिक लैब्स (LIS), सत्यापित फार्मेसियों और आपके पूरे मेडिकल इतिहास को एक सुरक्षित, रोगी-नियंत्रित डिजिटल स्वास्थ्य रिकॉर्ड में एकीकृत करता है।">CuraSync unifies top hospital doctors, accredited diagnostic labs (LIS), verified pharmacies, and your entire medical history into one secure, patient-controlled digital health record.</p>
+      
+      <div class="hero-buttons">
+        <button class="btn-primary" onclick="showPage('login')">
+          <span data-en="Access Health Records (ABHA)" data-hi="स्वास्थ्य रिकॉर्ड (ABHA) तक पहुंचें">Access Health Records (ABHA)</span> <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn-secondary">
+          <span data-en="Doctor Consultation & Rx" data-hi="डॉक्टर परामर्श और Rx">Doctor Consultation & Rx</span> <i class="fas fa-stethoscope"></i>
+        </button>
+        <button class="btn-outline">
+          <span data-en="Hospital Admin & LIS Lab Hub" data-hi="अस्पताल व्यवस्थापक और LIS लैब हब">Hospital Admin & LIS Lab Hub</span> <i class="fas fa-flask"></i>
+        </button>
+      </div>
+
+      <div class="search-bar-container">
+        <input type="text" placeholder="Search by Speciality, Doctor, Condition, Diagnostic Test or Drug...">
+        <button class="btn-secondary" style="background: #ea580c; padding: 0.6rem 1.2rem; border-radius: 2rem; white-space: nowrap;">
+          <i class="fas fa-user-doctor"></i> <span data-en="Find a Doctor" data-hi="डॉक्टर खोजें">Find a Doctor</span>
+        </button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item"><h3>650+</h3><p data-en="Doctors & Specialists" data-hi="डॉक्टर और विशेषज्ञ">Doctors & Specialists</p></div>
+        <div class="stat-item"><h3>400+</h3><p data-en="Partner Hospitals & Labs" data-hi="साझेदार अस्पताल और लैब">Partner Hospitals & Labs</p></div>
+        <div class="stat-item"><h3>50,000+</h3><p data-en="Health Records Digitized" data-hi="स्वास्थ्य रिकॉर्ड डिजिटल किए गए">Health Records Digitized</p></div>
+        <div class="stat-item"><h3>99.9%</h3><p data-en="Privacy Compliance" data-hi="गोपनीयता अनुपालन">Privacy Compliance</p></div>
+      </div>
+    </section>
+
+    <section class="section-container">
+      <div class="section-header">
+        <div>
+          <h2 data-en="Search by Speciality, Condition or Treatment" data-hi="विशेषता, स्थिति या उपचार के आधार पर खोजें">Search by Speciality, Condition or Treatment</h2>
+          <p data-en="Comprehensive clinical departments interconnected with our electronic health records." data-hi="हमारे इलेक्ट्रॉनिक स्वास्थ्य रिकॉर्ड के साथ परस्पर जुड़े व्यापक नैदानिक विभाग।">Comprehensive clinical departments interconnected with our electronic health records.</p>
+        </div>
+      </div>
+      <div class="spec-grid">
+        <div class="spec-card">
+          <i class="fas fa-heart spec-icon heart"></i><span class="spec-doc-count">48 Doctors</span>
+          <h3 data-en="Cardiology & Cardiac Surgery" data-hi="कार्डियोलॉजी और कार्डियक सर्जरी">Cardiology & Cardiac Surgery</h3>
+          <p data-en="Heart failure, angioplasty, hypertension & preventative care." data-hi="हृदय की विफलता, एंजियोप्लास्टी, उच्च रक्तचाप और निवारक देखभाल।">Heart failure, angioplasty, hypertension & preventative care.</p>
+          <a href="#" class="spec-link"><span data-en="Consult Specialist" data-hi="विशेषज्ञ से परामर्श करें">Consult Specialist</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="spec-card">
+          <i class="fas fa-droplet spec-icon blood"></i><span class="spec-doc-count">34 Doctors</span>
+          <h3 data-en="Endocrinology & Diabetes" data-hi="एंडोक्रिनोलॉजी और मधुमेह">Endocrinology & Diabetes</h3>
+          <p data-en="Type 1 & 2 DM, metabolic disorders, thyroid & insulin therapy." data-hi="टाइप 1 और 2 डीएम, चयापचय संबंधी विकार, थायरॉयड और इंसुलिन थेरेपी।">Type 1 & 2 DM, metabolic disorders, thyroid & insulin therapy.</p>
+          <a href="#" class="spec-link"><span data-en="Consult Specialist" data-hi="विशेषज्ञ से परामर्श करें">Consult Specialist</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="spec-card">
+          <i class="fas fa-bone spec-icon bone"></i><span class="spec-doc-count">52 Doctors</span>
+          <h3 data-en="Orthopedics & Joint Care" data-hi="हड्डी रोग और संयुक्त देखभाल">Orthopedics & Joint Care</h3>
+          <p data-en="Arthroscopy, knee/hip replacement, sports medicine." data-hi="आर्थ्रोस्कोपी, घुटने/कूल्हे का प्रतिस्थापन, खेल चिकित्सा।">Arthroscopy, knee/hip replacement, sports medicine.</p>
+          <a href="#" class="spec-link"><span data-en="Consult Specialist" data-hi="विशेषज्ञ से परामर्श करें">Consult Specialist</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="spec-card">
+          <i class="fas fa-microscope spec-icon microscope"></i><span class="spec-doc-count">28 Specialists</span>
+          <h3 data-en="Pathology & Diagnostic LIS" data-hi="पैथोलॉजी और डायग्नोस्टिक LIS">Pathology & Diagnostic LIS</h3>
+          <p data-en="Automated biochemistry, molecular genomics, HL7 lab sync." data-hi="स्वचालित जैव रसायन, आणविक जीनोमिक्स, HL7 लैब सिंक।">Automated biochemistry, molecular genomics, HL7 lab sync.</p>
+          <a href="#" class="spec-link"><span data-en="Consult Specialist" data-hi="विशेषज्ञ से परामर्श करें">Consult Specialist</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="pillars-section">
+      <div class="pillars-container">
+        <div class="pillars-header">
+          <h4 data-en="How CuraSync Eliminates Healthcare Silos" data-hi="CuraSync कैसे स्वास्थ्य सेवा साइलो को खत्म करता है">How CuraSync Eliminates Healthcare Silos</h4>
+          <h2 data-en="Four Healthcare Pillars Connected in Real Time" data-hi="वास्तविक समय में जुड़े चार स्वास्थ्य स्तंभ">Four Healthcare Pillars Connected in Real Time</h2>
+        </div>
+        <div class="pillars-grid">
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-user-doctor"></i></div>
+            <h3 data-en="1. Doctors & Clinics" data-hi="1. डॉक्टर और क्लिनिक">1. Doctors & Clinics</h3>
+            <p data-en="Accesses previous treatment history, sees past lab trends, and issues digital prescriptions with automated drug allergy safety checks." data-hi="पिछले उपचार इतिहास तक पहुंचता है, पिछले लैब रुझानों को देखता है, और स्वचालित दवा एलर्जी सुरक्षा जांच के साथ डिजिटल नुस्खे जारी करता है।">Accesses previous treatment history, sees past lab trends, and issues digital prescriptions with automated drug allergy safety checks.</p>
+          </div>
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-flask"></i></div>
+            <h3 data-en="2. Diagnostic Centres" data-hi="2. डायग्नोस्टिक सेंटर">2. Diagnostic Centres</h3>
+            <p data-en="Direct LIS integration uploads validated test reports directly into patient records with plain English translations." data-hi="प्रत्यक्ष LIS एकीकरण मान्य परीक्षण रिपोर्टों को सादे अंग्रेजी अनुवाद के साथ सीधे रोगी रिकॉर्ड में अपलोड करता है।">Direct LIS integration uploads validated test reports directly into patient records with plain English translations.</p>
+          </div>
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-link"></i></div>
+            <h3 data-en="3. Pharmacies" data-hi="3. फार्मेसी">3. Pharmacies</h3>
+            <p data-en="Verifies prescribed medicines against physical stock to prevent dangerous dispensing errors." data-hi="खतरनाक दवा वितरण त्रुटियों को रोकने के लिए भौतिक स्टॉक के खिलाफ निर्धारित दवाओं को सत्यापित करता है।">Verifies prescribed medicines against physical stock to prevent dangerous dispensing errors.</p>
+          </div>
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-user"></i></div>
+            <h3 data-en="4. Patients" data-hi="4. मरीज़">4. Patients</h3>
+            <p data-en="Holds sovereign ownership over lifelong medical records, controls who gets access via 2FA OTP, and understands tests in plain language." data-hi="आजीवन मेडिकल रिकॉर्ड पर संप्रभु स्वामित्व रखता है, 2FA OTP के माध्यम से नियंत्रित करता है कि किसे पहुंच मिलती है, और सादे भाषा में परीक्षणों को समझता है।">Holds sovereign ownership over lifelong medical records, controls who gets access via 2FA OTP, and understands tests in plain language.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= PAGE 2: ARCHITECTURE & STANDARDS ================= -->
+  <div id="page-architecture" class="hidden">
+    <div class="arch-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <p style="color: #64748b; font-size: 0.9rem; font-weight: 500;" data-en="Platform Architecture, Interoperability Standards & Expected Impact" data-hi="प्लेटफ़ॉर्म आर्किटेक्चर, इंटरऑपरेबिलिटी मानक और अपेक्षित प्रभाव">Platform Architecture, Interoperability Standards & Expected Impact</p>
+        <a onclick="showPage('landing')" style="color: #0284c7; font-weight: 600; font-size: 0.9rem; cursor: pointer;"><i class="fas fa-arrow-left"></i> <span data-en="Back to Hospital Home" data-hi="अस्पताल होम पर वापस जाएं">Back to Hospital Home</span></a>
+      </div>
+
+      <div class="arch-hero">
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); padding: 0.4rem 1rem; border-radius: 2rem; font-size: 0.8rem; margin-bottom: 1.5rem;">
+          <i class="fas fa-layer-group"></i> <span data-en="Technical Architecture & Impact Framework" data-hi="तकनीकी वास्तुकला और प्रभाव ढांचा">Technical Architecture & Impact Framework</span>
+        </div>
+        <h1 data-en="Unified Patient-Centric Healthcare Ecosystem" data-hi="एकीकृत रोगी-केंद्रित स्वास्थ्य सेवा पारिस्थितिकी तंत्र">Unified Patient-Centric Healthcare Ecosystem</h1>
+        <p data-en="A centralized, secure digital healthcare backbone designed to bridge provider information silos, safeguard patient autonomy through sovereign consent, and eradicate medical errors across the patient journey." data-hi="प्रदाता सूचना साइलो को पाटने, संप्रभु सहमति के माध्यम से रोगी की स्वायत्तता की रक्षा करने और रोगी की यात्रा में चिकित्सा त्रुटियों को खत्म करने के लिए डिज़ाइन किया गया एक केंद्रीकृत, सुरक्षित डिजिटल हेल्थकेयर बैकबोन।">A centralized, secure digital healthcare backbone designed to bridge provider information silos, safeguard patient autonomy through sovereign consent, and eradicate medical errors across the patient journey.</p>
+        
+        <div class="arch-stats">
+          <div class="arch-stat"><h3>94.2%</h3><p data-en="Reduction in Medication & Allergy Errors" data-hi="दवा और एलर्जी त्रुटियों में कमी">Reduction in Medication & Allergy Errors</p></div>
+          <div class="arch-stat"><h3>78%</h3><p data-en="Faster Diagnostic Turnaround Time" data-hi="तेज़ डायग्नोस्टिक टर्नअराउंड समय">Faster Diagnostic Turnaround Time</p></div>
+          <div class="arch-stat"><h3>100%</h3><p data-en="Patient Consent Verification Enforcement" data-hi="रोगी सहमति सत्यापन प्रवर्तन">Patient Consent Verification Enforcement</p></div>
+          <div class="arch-stat"><h3>0</h3><p data-en="Lost Diagnostic Reports or Paper Slips" data-hi="खोई हुई डायग्नोस्टिक रिपोर्ट या पेपर स्लिप">Lost Diagnostic Reports or Paper Slips</p></div>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-bottom: 1.5rem;">
+        <h2 data-en="Platform Core Goals & Realized Capabilities" data-hi="प्लेटफ़ॉर्म के मुख्य लक्ष्य और प्राप्त क्षमताएं">Platform Core Goals & Realized Capabilities</h2>
+      </div>
+      
+      <div class="arch-grid">
+        <div class="arch-card">
+          <span class="badge">#1</span>
+          <h3 data-en="Connect All Stakeholders" data-hi="सभी हितधारकों को जोड़ें">Connect All Stakeholders</h3>
+          <p data-en="Seamless bridge connecting doctors, diagnostic labs, pharmacies, and patients into a single real-time interoperable network." data-hi="डॉक्टरों, डायग्नोस्टिक लैब्स, फार्मेसियों और रोगियों को एक ही वास्तविक समय इंटरऑपरेबल नेटवर्क में जोड़ने वाला निर्बाध पुल।">Seamless bridge connecting doctors, diagnostic labs, pharmacies, and patients into a single real-time interoperable network.</p>
+        </div>
+        <div class="arch-card">
+          <span class="badge">#2</span>
+          <h3 data-en="Unified Digital Health Record" data-hi="एकीकृत डिजिटल स्वास्थ्य रिकॉर्ड">Unified Digital Health Record</h3>
+          <p data-en="Longitudinal electronic health record (EHR/PHR) consolidating lifelong consultations, vitals, diseases, and surgeries." data-hi="आजीवन परामर्श, महत्वपूर्ण संकेतों, बीमारियों और सर्जरी को समेकित करने वाला अनुदैर्ध्य इलेक्ट्रॉनिक स्वास्थ्य रिकॉर्ड (EHR/PHR)।">Longitudinal electronic health record (EHR/PHR) consolidating lifelong consultations, vitals, diseases, and surgeries.</p>
+        </div>
+        <div class="arch-card">
+          <span class="badge">#3</span>
+          <h3 data-en="LIS & Software Integration" data-hi="LIS और सॉफ्टवेयर एकीकरण">LIS & Software Integration</h3>
+          <p data-en="Native HL7 v2.5.1 and FHIR R4 connectors ingest automated results directly from laboratory analyzers and hospital systems." data-hi="मूल HL7 v2.5.1 और FHIR R4 कनेक्टर सीधे प्रयोगशाला विश्लेषक और अस्पताल प्रणालियों से स्वचालित परिणाम प्राप्त करते हैं।">Native HL7 v2.5.1 and FHIR R4 connectors ingest automated results directly from laboratory analyzers and hospital systems.</p>
+        </div>
+        <div class="arch-card">
+          <span class="badge">#4</span>
+          <h3 data-en="Digitize Prescriptions & Reports" data-hi="नुस्खे और रिपोर्ट डिजिटल करें">Digitize Prescriptions & Reports</h3>
+          <p data-en="Cryptographically signed electronic prescriptions and structured laboratory reports replacing illegible paper slips." data-hi="क्रिप्टोग्राफ़िक रूप से हस्ताक्षरित इलेक्ट्रॉनिक नुस्खे और संरचित प्रयोगशाला रिपोर्ट अपठनीय पेपर स्लिप की जगह लेते हैं।">Cryptographically signed electronic prescriptions and structured laboratory reports replacing illegible paper slips.</p>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-bottom: 1.5rem;">
+        <h2 data-en="Regulatory & Technical Interoperability Standards" data-hi="नियामक और तकनीकी इंटरऑपरेबिलिटी मानक">Regulatory & Technical Interoperability Standards</h2>
+      </div>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <h3 data-en="Healthcare Interoperability" data-hi="स्वास्थ्य सेवा इंटरऑपरेबिलिटी">Healthcare Interoperability</h3>
+          <p data-en="Compliant with HL7 FHIR Release 4, LOINC code systems for laboratory observations, and SNOMED-CT / ICD-10 clinical taxonomies." data-hi="HL7 FHIR रिलीज 4, प्रयोगशाला टिप्पणियों के लिए LOINC कोड सिस्टम, और SNOMED-CT / ICD-10 नैदानिक वर्गीकरण के साथ अनुरूप।">Compliant with HL7 FHIR Release 4, LOINC code systems for laboratory observations, and SNOMED-CT / ICD-10 clinical taxonomies.</p>
+        </div>
+        <div class="arch-card">
+          <h3 data-en="Security & Encryption" data-hi="सुरक्षा और एन्क्रिप्शन">Security & Encryption</h3>
+          <p data-en="Zero-Trust architecture with AES-256 at rest, TLS 1.3 MLLP in transit, asymmetric RSA-4096 digital signatures for prescriptions, and tamper-evident audit logging." data-hi="आराम के समय AES-256 के साथ जीरो-ट्रस्ट आर्किटेक्चर, ट्रांजिट में TLS 1.3 MLLP, नुस्खों के लिए असममित RSA-4096 डिजिटल हस्ताक्षर, और छेड़छाड़-स्पष्ट ऑडिट लॉगिंग।">Zero-Trust architecture with AES-256 at rest, TLS 1.3 MLLP in transit, asymmetric RSA-4096 digital signatures for prescriptions, and tamper-evident audit logging.</p>
+        </div>
+        <div class="arch-card">
+          <h3 data-en="Consent & Patient Rights" data-hi="सहमति और रोगी अधिकार">Consent & Patient Rights</h3>
+          <p data-en="Aligns with Ayushman Bharat Digital Mission (ABDM) electronic consent architecture, HIPAA Privacy Rule §164.508, and GDPR Article 9 for explicit patient consent management." data-hi="आयुष्मान भारत डिजिटल मिशन (ABDM) इलेक्ट्रॉनिक सहमति वास्तुकला, HIPAA गोपनीयता नियम §164.508, और स्पष्ट रोगी सहमति प्रबंधन के लिए GDPR अनुच्छेद 9 के साथ संरेखित करता है।">Aligns with Ayushman Bharat Digital Mission (ABDM) electronic consent architecture, HIPAA Privacy Rule §164.508, and GDPR Article 9 for explicit patient consent management.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 3: LOGIN PORTAL ================= -->
+  <div id="page-login" class="hidden">
+    <div class="login-wrapper">
+      <div class="login-container">
+        <div class="login-header">
+          <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+          <h2 data-en="Sign In to CuraSync" data-hi="CuraSync में साइन इन करें">Sign In to CuraSync</h2>
+          <p data-en="Unified Patient-Centric Healthcare Portal. Select your role to access your records and services." data-hi="एकीकृत रोगी-केंद्रित स्वास्थ्य सेवा पोर्टल। अपने रिकॉर्ड और सेवाओं तक पहुंचने के लिए अपनी भूमिका चुनें।">Unified Patient-Centric Healthcare Portal. Select your role to access your records and services.</p>
+        </div>
+
+        <!-- Role Tabs -->
+        <div class="role-tabs">
+          <div class="role-tab active" onclick="switchRole('patient')" id="tab-patient"><i class="fas fa-user"></i> <span data-en="Patient / User" data-hi="मरीज़ / उपयोगकर्ता">Patient / User</span></div>
+          <div class="role-tab" onclick="switchRole('doctor')" id="tab-doctor"><i class="fas fa-user-md"></i> <span data-en="Doctor" data-hi="डॉक्टर">Doctor</span></div>
+          <div class="role-tab" onclick="switchRole('admin')" id="tab-admin"><i class="fas fa-shield-halved"></i> <span data-en="Hospital Admin" data-hi="अस्पताल व्यवस्थापक">Hospital Admin</span></div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-card">
+          <div class="access-mode">
+            <span id="access-mode-title">Patient Health Wallet (ABHA)</span>
+            <span>Secure Portal</span>
+          </div>
+          
+          <form id="login-form">
+            <div class="form-group">
+              <label id="lbl-id" data-en="ABHA Address / Mobile Number / Email" data-hi="ABHA पता / मोबाइल नंबर / ईमेल">ABHA Address / Mobile Number / Email</label>
+              <input type="text" id="login-id" value="rajesh.kumar@abdm" required>
+            </div>
+            <div class="form-group">
+              <div style="display: flex; justify-content: space-between;">
+                <label id="lbl-pin" data-en="Password / Access PIN" data-hi="पासवर्ड / एक्सेस पिन">Password / Access PIN</label>
+                <a href="#" style="font-size: 0.75rem; color: #0284c7; font-weight: 600;" data-en="Forgot PIN?" data-hi="पिन भूल गए?">Forgot PIN?</a>
+              </div>
+              <input type="password" id="login-pin" value="••••••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit patient" id="btn-login-submit">
+              <span id="btn-login-text" data-en="Sign In as Patient" data-hi="मरीज़ के रूप में साइन इन करें">Sign In as Patient</span> <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <div class="quick-demo">
+            <p data-en="QUICK 1-CLICK DEMO LOGIN:" data-hi="त्वरित 1-क्लिक डेमो लॉगिन:">QUICK 1-CLICK DEMO LOGIN:</p>
+            <div class="demo-buttons">
+              <button class="demo-btn patient" onclick="quickLogin('patient')"><i class="fas fa-user"></i> <span data-en="Patient (Rajesh)" data-hi="मरीज़ (राजेश)">Patient (Rajesh)</span></button>
+              <button class="demo-btn doctor" onclick="quickLogin('doctor')"><i class="fas fa-user-md"></i> <span data-en="Dr. Sarah" data-hi="डॉ. सारा">Dr. Sarah</span></button>
+              <button class="demo-btn admin" onclick="quickLogin('admin')"><i class="fas fa-shield-halved"></i> <span data-en="Hospital Admin" data-hi="अस्पताल व्यवस्थापक">Hospital Admin</span></button>
+            </div>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+          <a onclick="showPage('landing')" style="color: #64748b; font-size: 0.9rem; font-weight: 600; cursor: pointer;"><i class="fas fa-arrow-left"></i> <span data-en="Back to Hospital Home Page" data-hi="अस्पताल होम पेज पर वापस जाएं">Back to Hospital Home Page</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 4: DASHBOARD ================= -->
+  <div id="dashboard-page" class="hidden">
+    <header class="app-header">
+      <div class="logo-container" onclick="logout()">
+        <div class="logo-icon" style="width: 2.2rem; height: 2.2rem; font-size: 1rem;"><i class="fas fa-heart-pulse"></i></div>
+        <div class="logo-text"><h1 style="font-size: 1.2rem;">CuraSync</h1></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; background: #f1f5f9; padding: 0.4rem 1rem 0.4rem 0.6rem; border-radius: 2rem;">
+          <i class="fas fa-user-circle" style="font-size: 1.6rem; color: #0284c7;"></i>
+          <span id="dash-user-name" style="font-weight: 500; color: #0f172a; font-size: 0.9rem;">Sarah Johnson</span>
+        </div>
+        <button class="btn-outline" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> <span data-en="Logout" data-hi="लॉगआउट">Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+      <div class="dash-welcome">
+        <div>
+          <h1><span data-en="Hello," data-hi="नमस्ते,">Hello,</span> <span id="dash-user-first-name">Sarah</span> 👋</h1>
+          <p data-en="Your unified ABHA health record is up to date." data-hi="आपका एकीकृत ABHA स्वास्थ्य रिकॉर्ड अद्यतित है।">Your unified ABHA health record is up to date.</p>
+        </div>
+        <div class="hero-badge" style="margin: 0; background: #dcfce7; color: #166534;">
+          <i class="fas fa-shield-check"></i> <span data-en="Consent-based sharing active" data-hi="सहमति-आधारित साझाकरण सक्रिय">Consent-based sharing active</span>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-notes-medical"></i></div>
+          <h3 data-en="Active Prescriptions" data-hi="सक्रिय नुस्खे">Active Prescriptions</h3>
+          <div class="stat-value">3</div>
+          <div style="font-size: 0.85rem; color: #64748b;"><i class="fas fa-check-circle" style="color: #10b981;"></i> <span data-en="All verified" data-hi="सभी सत्यापित">All verified</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-flask"></i></div>
+          <h3 data-en="Diagnostic Reports" data-hi="डायग्नोस्टिक रिपोर्ट">Diagnostic Reports</h3>
+          <div class="stat-value">8</div>
+          <div style="font-size: 0.85rem; color: #64748b;"><i class="fas fa-clock" style="color: #0284c7;"></i> <span data-en="2 new this month" data-hi="इस महीने 2 नए">2 new this month</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+          <h3 data-en="Consultations" data-hi="परामर्श">Consultations</h3>
+          <div class="stat-value">12</div>
+          <div style="font-size: 0.85rem; color: #64748b;"><i class="fas fa-calendar-check" style="color: #0284c7;"></i> <span data-en="Next: 15 May" data-hi="अगला: 15 मई">Next: 15 May</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-pills"></i></div>
+          <h3 data-en="Medication Adherence" data-hi="दवा पालन">Medication Adherence</h3>
+          <div class="stat-value">94%</div>
+          <div style="font-size: 0.85rem; color: #64748b;"><i class="fas fa-arrow-up" style="color: #10b981;"></i> <span data-en="6% from last month" data-hi="पिछले महीने से 6%">6% from last month</span></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-clock-rotate-left" style="color: #0284c7;"></i> <span data-en="Recent Activity" data-hi="हाल की गतिविधि">Recent Activity</span></h3>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-icon"><i class="fas fa-file-prescription"></i></div>
+            <div>
+              <h4 style="font-size: 0.95rem; font-weight: 600;" data-en="Prescription verified — Metformin 500mg" data-hi="नुस्खा सत्यापित — मेटफॉर्मिन 500mg">Prescription verified — Metformin 500mg</h4>
+              <p style="font-size: 0.85rem; color: #64748b;" data-en="Dispensed at GreenCross Pharmacy" data-hi="ग्रीनक्रॉस फार्मेसी में वितरित">Dispensed at GreenCross Pharmacy</p>
+              <span class="badge-green" style="margin-top: 0.5rem; display: inline-block;" data-en="Verified" data-hi="सत्यापित">Verified</span>
+            </div>
+          </div>
+
+          <div class="list-item">
+            <div class="list-icon"><i class="fas fa-vial"></i></div>
+            <div>
+              <h4 style="font-size: 0.95rem; font-weight: 600;" data-en="Lipid profile report uploaded" data-hi="लिपिड प्रोफाइल रिपोर्ट अपलोड की गई">Lipid profile report uploaded</h4>
+              <p style="font-size: 0.85rem; color: #64748b;" data-en="City Diagnostics · Dr. Mehta" data-hi="सिटी डायग्नोस्टिक्स · डॉ. मेहता">City Diagnostics · Dr. Mehta</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-prescription-bottle-medical" style="color: #0284c7;"></i> <span data-en="Prescription Verification" data-hi="नुस्खा सत्यापन">Prescription Verification</span></h3>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9;">
+            <div style="font-weight: 500; display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-capsules" style="color: #0284c7;"></i> Metformin 500mg</div>
+            <div style="color: #166534; font-size: 0.85rem; font-weight: 500;"><i class="fas fa-circle-check"></i> <span data-en="Verified" data-hi="सत्यापित">Verified</span></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.8rem 0;">
+            <div style="font-weight: 500; display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-capsules" style="color: #0284c7;"></i> Atorvastatin 10mg</div>
+            <div style="color: #b91c1c; font-size: 0.85rem; font-weight: 500;"><i class="fas fa-circle-exclamation"></i> <span data-en="Pending match" data-hi="मिलान लंबित">Pending match</span></div>
+          </div>
+          <div style="background: #f0f9ff; border-radius: 0.8rem; padding: 1.2rem; margin-top: 1rem; border-left: 4px solid #0284c7;">
+            <p style="font-size: 0.9rem; color: #0f172a; font-weight: 600; margin-bottom: 0.3rem;" data-en="💡 Understand your report" data-hi="💡 अपनी रिपोर्ट समझें">💡 Understand your report</p>
+            <p style="font-size: 0.85rem; color: #475569;" data-en="Your recent lipid profile shows LDL cholesterol 130 mg/dL — a bit above the target. This means there is extra fat in your blood, which can be managed with diet, exercise and Atorvastatin as prescribed." data-hi="आपके हालिया लिपिड प्रोफाइल में LDL कोलेस्ट्रॉल 130 mg/dL दिखा है — जो लक्ष्य से थोड़ा अधिक है। इसका मतलब है कि आपके रक्त में अतिरिक्त वसा है, जिसे निर्धारित आहार, व्यायाम और एटोरवास्टेटिन से प्रबंधित किया जा सकता है।">Your recent lipid profile shows LDL cholesterol 130 mg/dL — a bit above the target. This means there is extra fat in your blood, which can be managed with diet, exercise and Atorvastatin as prescribed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.8rem;">CuraSync Healthcare</h3>
+        <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6;" data-en="Centralized, secure and patient-centric healthcare platform connecting doctors, diagnostic centres, pharmacies, and patients." data-hi="केंद्रीकृत, सुरक्षित और रोगी-केंद्रित स्वास्थ्य सेवा मंच जो डॉक्टरों, डायग्नोस्टिक सेंटरों, फार्मेसियों और रोगियों को जोड़ता है।">Centralized, secure and patient-centric healthcare platform connecting doctors, diagnostic centres, pharmacies, and patients.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-en="Emergency & Helpline" data-hi="आपातकालीन और हेल्पलाइन">Emergency & Helpline</h4>
+        <ul>
+          <li><i class="fas fa-phone"></i> 24/7: 1068 / 1800-309-0309</li>
+          <li><i class="fas fa-phone"></i> OPD: +91-880-000-1068</li>
+          <li><i class="fas fa-envelope"></i> care@curasync.org</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-en="Standards & Compliance" data-hi="मानक और अनुपालन">Standards & Compliance</h4>
+        <ul>
+          <li><i class="fas fa-certificate"></i> HL7 FHIR Release 4 Standard</li>
+          <li><i class="fas fa-certificate"></i> Ayushman Bharat Digital Mission (ABDM)</li>
+          <li><i class="fas fa-certificate"></i> Zero-Trust Sovereign Consent Architecture</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CuraSync Health Systems. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- ================= AI CHATBOT ================= -->
+  <button class="chatbot-toggle" id="chatbot-toggle">
+    <i class="fas fa-robot"></i>
+  </button>
+  
+  <div class="chatbot-window" id="chatbot-window">
+    <div class="chat-header">
+      <h3><i class="fas fa-robot"></i> Cura AI Assistant</h3>
+      <button class="chat-close" id="chat-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="message bot">Hi 👋 I'm Cura AI. I can help translate complex lab tests and medical prescriptions into plain English or Hindi. How can I help you today?</div>
+    </div>
+    <div class="typing" id="typing-indicator">Cura AI is typing...</div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Ask about a test or medicine...">
+      <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // ================= 1. PAGE NAVIGATION =================
+    function showPage(pageId) {
+      document.getElementById('page-landing').classList.add('hidden');
+      document.getElementById('page-architecture').classList.add('hidden');
+      document.getElementById('page-login').classList.add('hidden');
+      document.getElementById('dashboard-page').classList.add('hidden');
+
+      if (pageId === 'landing') document.getElementById('page-landing').classList.remove('hidden');
+      if (pageId === 'architecture') document.getElementById('page-architecture').classList.remove('hidden');
+      if (pageId === 'login') document.getElementById('page-login').classList.remove('hidden');
+      if (pageId === 'dashboard') document.getElementById('dashboard-page').classList.remove('hidden');
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+
+      // Update active nav state
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      if (pageId === 'landing') document.getElementById('nav-home').classList.add('active');
+      if (pageId === 'architecture') document.getElementById('nav-arch').classList.add('active');
+    }
+
+    // ================= 2. LANGUAGE TOGGLE (EN / HI) =================
+    let currentLang = 'en';
+
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'hi' : 'en';
+      document.getElementById('lang-toggle').innerText = currentLang === 'en' ? 'हिंदी / EN' : 'English / हिं';
+      
+      // Update all elements with data-en and data-hi attributes
+      document.querySelectorAll('[data-en][data-hi]').forEach(el => {
+        el.innerText = el.getAttribute(`data-${currentLang}`);
+      });
+
+      // Update Placeholders
+      const searchInput = document.querySelector('.search-bar-container input');
+      if (searchInput) searchInput.placeholder = currentLang === 'en' 
+        ? "Search by Speciality, Doctor, Condition, Diagnostic Test or Drug..." 
+        : "विशेषता, डॉक्टर, स्थिति, डायग्नोस्टिक टेस्ट या दवा से खोजें...";
+
+      const chatInput = document.getElementById('chat-input');
+      if (chatInput) chatInput.placeholder = currentLang === 'en' 
+        ? "Ask about a test or medicine..." 
+        : "किसी परीक्षण या दवा के बारे में पूछें...";
+        
+      // Update dynamic login fields based on current role tab
+      updateLoginForm(currentRole);
+    });
+
+    // ================= 3. LOGIN PORTAL LOGIC =================
+    let currentRole = 'patient';
+
+    function switchRole(role) {
+      currentRole = role;
+      
+      // Reset tabs
+      document.querySelectorAll('.role-tab').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(`tab-${role}`).classList.add('active');
+
+      // Update Form Content
+      updateLoginForm(role);
+    }
+
+    function updateLoginForm(role) {
+      const modeTitle = document.getElementById('access-mode-title');
+      const lblId = document.getElementById('lbl-id');
+      const btnSubmit = document.getElementById('btn-login-submit');
+      const btnText = document.getElementById('btn-login-text');
+      const loginIdInput = document.getElementById('login-id');
+
+      // Remove existing color classes
+      btnSubmit.className = 'btn-submit';
+
+      if (role === 'patient') {
+        modeTitle.innerText = currentLang === 'en' ? "Patient Health Wallet (ABHA)" : "रोगी स्वास्थ्य वॉलेट (ABHA)";
+        lblId.innerText = currentLang === 'en' ? "ABHA Address / Mobile Number / Email" : "ABHA पता / मोबाइल नंबर / ईमेल";
+        loginIdInput.value = "rajesh.kumar@abdm";
+        btnSubmit.classList.add('patient');
+        btnText.innerText = currentLang === 'en' ? "Sign In as Patient" : "मरीज़ के रूप में साइन इन करें";
+        document.getElementById('dash-user-name').innerText = "Rajesh Kumar";
+        document.getElementById('dash-user-first-name').innerText = "Rajesh";
+      } 
+      else if (role === 'doctor') {
+        modeTitle.innerText = currentLang === 'en' ? "Clinician & EMR Prescription Pad" : "चिकित्सक और EMR प्रिस्क्रिप्शन पैड";
+        lblId.innerText = currentLang === 'en' ? "Doctor Email / MCI Registration ID" : "डॉक्टर ईमेल / MCI पंजीकरण आईडी";
+        loginIdInput.value = "dr.sarah@apexhealth.org";
+        btnSubmit.classList.add('doctor');
+        btnText.innerText = currentLang === 'en' ? "Sign In as Doctor" : "डॉक्टर के रूप में साइन इन करें";
+        document.getElementById('dash-user-name').innerText = "Dr. Sarah";
+        document.getElementById('dash-user-first-name').innerText = "Dr. Sarah";
+      } 
+      else if (role === 'admin') {
+        modeTitle.innerText = currentLang === 'en' ? "Hospital Governance & LIS Hub" : "अस्पताल शासन और LIS हब";
+        lblId.innerText = currentLang === 'en' ? "Administrator Username / Email" : "प्रशासक उपयोगकर्ता नाम / ईमेल";
+        loginIdInput.value = "admin@curasync.org";
+        btnSubmit.classList.add('admin');
+        btnText.innerText = currentLang === 'en' ? "Sign In as Administrator" : "प्रशासक के रूप में साइन इन करें";
+        document.getElementById('dash-user-name').innerText = "Hospital Admin";
+        document.getElementById('dash-user-first-name').innerText = "Admin";
+      }
+    }
+
+    function quickLogin(role) {
+      switchRole(role);
+      setTimeout(() => {
+        document.getElementById('login-form').dispatchEvent(new Event('submit'));
+      }, 200);
+    }
+
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      showPage('dashboard');
+    });
+
+    function logout() {
+      showPage('landing');
+    }
+
+    // ================= 4. REAL AI CHATBOT (ChatGPT API) =================
+    const chatToggle = document.getElementById('chatbot-toggle');
+    const chatWindow = document.getElementById('chatbot-window');
+    const chatClose = document.getElementById('chat-close');
+    const chatSend = document.getElementById('chat-send');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    // ⚠️ IMPORTANT: INSERT YOUR OPENAI API KEY HERE ⚠️
+    // Do not use this in production without a backend proxy to protect your key.
+    const OPENAI_API_KEY = "sk-proj-YOUR_OPENAI_API_KEY_HERE"; 
+
+    chatToggle.addEventListener('click', () => {
+      chatWindow.classList.toggle('active');
+    });
+
+    chatClose.addEventListener('click', () => {
+      chatWindow.classList.remove('active');
+    });
+
+    async function handleChatSend() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      // Add user message to UI
+      addMessage(text, 'user');
+      chatInput.value = '';
+
+      // Show typing indicator
+      typingIndicator.style.display = 'block';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Prepare the API call
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${OPENAI_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "system",
+                content: "You are Cura AI, a helpful medical assistant for the CuraSync platform. You explain complex medical terms, lab reports, and prescriptions in plain English or Hindi based on the user's query. Keep responses concise and patient-friendly. Do not give medical diagnoses, just translate/explain."
+              },
+              { role: "user", content: text }
+            ],
+            max_tokens: 150
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error.message);
+        }
+
+        const botReply = data.choices[0].message.content;
+        
+        // Hide typing, add bot message
+        typingIndicator.style.display = 'none';
+        addMessage(botReply, 'bot');
+
+      } catch (error) {
+        console.error("Chat Error:", error);
+        typingIndicator.style.display = 'none';
+        
+        // Fallback message if API key is missing or fails
+        let fallbackMsg = "I'm sorry, I cannot connect to the AI service right now. ";
+        if (OPENAI_API_KEY === "sk-proj-YOUR_OPENAI_API_KEY_HERE") {
+          fallbackMsg += "Please note: You need to insert your OpenAI API key in the code to enable real AI responses.";
+        } else {
+          fallbackMsg += "Please check your API key or try again later.";
+        }
+        addMessage(fallbackMsg, 'bot');
+      }
+    }
+
+    function addMessage(text, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${sender}`;
+      msgDiv.innerText = text;
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatSend.addEventListener('click', handleChatSend);
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleChatSend();
+    });
+
+    // ================= INITIALIZE =================
+    showPage('landing');
+    switchRole('patient'); // Set default login form
+  </script>
+</body>
+</html>
